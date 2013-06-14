@@ -16,7 +16,7 @@ celery.conf.update(
     CELERY_TASK_RESULT_EXPIRES=3600,
     CELERY_RESULT_DBURI="sqlite:///foo.db",
     CELERY_DISABLE_RATE_LIMITS=True,
-    STATSD_HOST = "graphite-n01.staging.chkmate.rackspace.net",
+    STATSD_HOST = "your.graphite.server",
     STATSD_PORT = 2003,
 )
 
