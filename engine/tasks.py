@@ -10,6 +10,8 @@ from __future__ import absolute_import
 from engine.celery import celery, AlwaysRetryTask
 from engine import foo
 
+from statsd_instrument import *
+
 
 class EngineTaskError(StandardError):
     '''An error that was raised in a task'''
@@ -24,11 +26,13 @@ class InterruptedTaskError(StandardError):
 
 
 @celery.task(base=AlwaysRetryTask, max_retries=0)
+@instrument_task
 def success(x, y):
     return foo.success(x, y)
 
 
 @celery.task(base=AlwaysRetryTask, default_retry_delay=2, max_retries=1)
+@instrument_task
 def failure(fail=True):
     '''This task just demonstrates capturing errors from the called function
     and wrapping it in an exception that is application-specific. We could use
@@ -44,10 +48,12 @@ def failure(fail=True):
 
 
 @celery.task(base=AlwaysRetryTask)
+@instrument_task
 def handle_failure(name, exc):
     return foo.handle_failure(name, exc)
 
 
 @celery.task(base=AlwaysRetryTask, soft_time_limit=1)
+@instrument_task
 def run_long(seconds):
     return foo.run_long(seconds)
