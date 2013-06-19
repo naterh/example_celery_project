@@ -28,8 +28,6 @@ because it always reports `task_name` as 'run'
 """
 
 # statsd instrumentation
-from celery import current_app
-import statsd
 
 def simple_decorator(decorator):
     """Borrowed from:
@@ -64,6 +62,9 @@ def instrument_task(func):
     """Wraps a celery task with statsd instrumentation code"""
 
     def instrument_wrapper(*args, **kwargs):
+        from celery import current_app
+        import statsd
+        
         stats_conn = statsd.connection.Connection(
             host = current_app.conf['STATSD_HOST'],
             port = current_app.conf['STATSD_PORT'],
